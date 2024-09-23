@@ -1,0 +1,7 @@
+CREATE TABLE usuarios
+(
+    id    UUID PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL UNIQUE,
+    nome  VARCHAR(255) NOT NULL
+);
