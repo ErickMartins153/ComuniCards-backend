@@ -3,10 +3,7 @@ package br.upe.comunicards.domain.cartoes.models;
 import br.upe.comunicards.domain.cartoes.models.enums.Categoria;
 import br.upe.comunicards.domain.usuarios.models.Usuario;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 import java.util.UUID;
@@ -16,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
+@Setter @ToString @EqualsAndHashCode
 public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -25,7 +22,7 @@ public class Cartao {
     @Column(name = "titulo", nullable = false)
     private String titulo;
 
-    @Column(name = "categoria", nullable = false)
+    @Column(name = "categoria")
     @Enumerated(EnumType.STRING)
     private Categoria categoria;
 
