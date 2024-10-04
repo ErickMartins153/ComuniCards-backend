@@ -26,11 +26,14 @@ public class Cartao {
     @Enumerated(EnumType.STRING)
     private Categoria categoria;
 
-    @Column(name = "descricao", nullable = false)
-    private String descricao;
+    @Column(name = "frase", nullable = false)
+    private String frase;
 
     @Column(name = "url_audio", nullable = false)
     private String urlAudio;
+
+    @Column(name = "url_imagem", nullable = false)
+    private String urlImagem;
 
     @ManyToMany(mappedBy = "favoritos")
     Set<Usuario> favoritados;

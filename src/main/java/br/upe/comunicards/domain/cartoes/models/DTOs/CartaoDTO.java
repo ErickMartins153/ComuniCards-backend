@@ -6,11 +6,11 @@ import lombok.Builder;
 
 
 @Builder
-public record CartaoDTO(String titulo, String categoria, String descricao, String urlAudio) {
+public record CartaoDTO(String titulo, String categoria, String frase, String urlAudio, String urlImagem) {
 
     public static CartaoDTO from(Cartao cartao) {
         return new CartaoDTO(cartao.getTitulo(),
-                cartao.getCategoria().name(), cartao.getDescricao(), cartao.getUrlAudio());
+                cartao.getCategoria().name(), cartao.getFrase(), cartao.getUrlAudio(), cartao.getUrlImagem());
     }
 
     public Cartao toCartao() {
@@ -25,7 +25,7 @@ public record CartaoDTO(String titulo, String categoria, String descricao, Strin
         }
 
         cartao.setCategoria(categoriaEnum);
-        cartao.setDescricao(descricao);
+        cartao.setFrase(frase);
         cartao.setUrlAudio(urlAudio);
         return cartao;
     }
