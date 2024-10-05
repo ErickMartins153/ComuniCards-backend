@@ -12,7 +12,7 @@ public interface CartaoService {
 
     public Cartao getById(UUID id);
 
-    public UUID create(CartaoDTO cartao);
+    public Cartao create(CartaoDTO cartao);
 
     public Cartao update(CartaoDTO cartao, UUID id);
 

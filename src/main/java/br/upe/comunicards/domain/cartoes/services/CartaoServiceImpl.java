@@ -36,11 +36,10 @@ public class CartaoServiceImpl implements CartaoService {
     }
 
     @Override
-    public UUID create(CartaoDTO cartaoDTO) {
+    public Cartao create(CartaoDTO cartaoDTO) {
         Cartao cartao = cartaoDTO.toCartao();
-
         Cartao savedCartao = cartaoRepository.save(cartao);
-        return savedCartao.getId();
+        return savedCartao;
 
     }
 

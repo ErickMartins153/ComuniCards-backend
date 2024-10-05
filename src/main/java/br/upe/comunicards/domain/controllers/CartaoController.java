@@ -16,41 +16,43 @@ import java.util.UUID;
 public class CartaoController {
     CartaoService cartaoService;
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/all")
     public ResponseEntity<List<Cartao>> getCartaos() {
         return ResponseEntity.ok().body(cartaoService.getAll());
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/{id}")
     public ResponseEntity<Cartao> getCartaoById(@PathVariable UUID id) {
         try {
-        return ResponseEntity.ok().body(cartaoService.getById(id));
+            return ResponseEntity.ok().body(cartaoService.getById(id));
 
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/create")
     public ResponseEntity<Cartao> createCartao(@RequestBody CartaoDTO cartaoDTO) {
-        UUID id = cartaoService.create(cartaoDTO);
-        if (id == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().body(cartaoService.getById(id));
+
+        return ResponseEntity.ok().body(cartaoService.create(cartaoDTO));
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/update/{id}")
-    public ResponseEntity<Cartao> updateCartao(@PathVariable UUID id,@RequestBody CartaoDTO cartaoDTO) {
+    public ResponseEntity<Cartao> updateCartao(@PathVariable UUID id, @RequestBody CartaoDTO cartaoDTO) {
         try {
 
-        cartaoService.update(cartaoDTO, id);
-        return ResponseEntity.ok().build();
+            cartaoService.update(cartaoDTO, id);
+            return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Cartao> deleteCartao(@PathVariable UUID id) {
         cartaoService.delete(id);

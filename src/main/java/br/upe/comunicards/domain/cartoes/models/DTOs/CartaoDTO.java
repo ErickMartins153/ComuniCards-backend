@@ -2,15 +2,25 @@ package br.upe.comunicards.domain.cartoes.models.DTOs;
 
 import br.upe.comunicards.domain.cartoes.models.Cartao;
 import br.upe.comunicards.domain.cartoes.models.enums.Categoria;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 
 @Builder
-public record CartaoDTO(String titulo, String categoria, String frase, String urlAudio, String urlImagem) {
+public record CartaoDTO(
+        @NotNull
+        String titulo,
+        @NotNull
+        String categoria,
+        @NotNull
+        String frase,
+        @NotNull
+        String urlImagem
+) {
 
     public static CartaoDTO from(Cartao cartao) {
         return new CartaoDTO(cartao.getTitulo(),
-                cartao.getCategoria().name(), cartao.getFrase(), cartao.getUrlAudio(), cartao.getUrlImagem());
+                cartao.getCategoria().name(), cartao.getFrase(), cartao.getUrlImagem());
     }
 
     public Cartao toCartao() {
@@ -26,7 +36,7 @@ public record CartaoDTO(String titulo, String categoria, String frase, String ur
 
         cartao.setCategoria(categoriaEnum);
         cartao.setFrase(frase);
-        cartao.setUrlAudio(urlAudio);
+        cartao.setUrlImagem(urlImagem());
         return cartao;
     }
 }

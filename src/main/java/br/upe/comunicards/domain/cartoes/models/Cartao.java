@@ -29,8 +29,6 @@ public class Cartao {
     @Column(name = "frase", nullable = false)
     private String frase;
 
-    @Column(name = "url_audio", nullable = false)
-    private String urlAudio;
 
     @Column(name = "url_imagem", nullable = false)
     private String urlImagem;
