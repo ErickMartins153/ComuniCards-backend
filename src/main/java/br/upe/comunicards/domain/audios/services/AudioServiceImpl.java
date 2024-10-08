@@ -24,17 +24,13 @@ public class AudioServiceImpl implements AudioService {
         if (cartao == null) {
             throw new RuntimeException("Não foi possível achar um cartão com id: " + id);
         }
-        String fraseCodificada;
-        try {
-            fraseCodificada = URLEncoder.encode(cartao.getFrase(), "UTF-8");
+        String fraseCodificada = cartao.getFrase().replaceAll("\\+", "%20");
 
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+
         if (fraseCodificada == null) {
             throw new RuntimeException("Algo deu errado");
         }
-        String url = "https://translate.google.com/translate_tts?ie=UTF-8&q=" + fraseCodificada + "&tl=pt&client=tw-ob";
+        String url = "https://translate.google.com/translate_tts?ie=UTF8&q=" + fraseCodificada + "&tl=pt&client=tw-ob";
         byte[] audioData = restTemplate.getForObject(url, byte[].class);
 
         ByteArrayResource resource = new ByteArrayResource(audioData);
