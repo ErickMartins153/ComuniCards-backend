@@ -17,7 +17,7 @@ public class CartaoController {
     CartaoService cartaoService;
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping("/all")
+    @GetMapping()
     public ResponseEntity<List<Cartao>> getCartaos() {
         return ResponseEntity.ok().body(cartaoService.getAll());
     }
@@ -34,14 +34,14 @@ public class CartaoController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping("/create")
+    @PostMapping()
     public ResponseEntity<Cartao> createCartao(@RequestBody CartaoDTO cartaoDTO) {
 
         return ResponseEntity.ok().body(cartaoService.create(cartaoDTO));
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Cartao> updateCartao(@PathVariable UUID id, @RequestBody CartaoDTO cartaoDTO) {
         try {
 
@@ -53,7 +53,7 @@ public class CartaoController {
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Cartao> deleteCartao(@PathVariable UUID id) {
         cartaoService.delete(id);
         return ResponseEntity.ok().build();
