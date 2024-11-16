@@ -1,7 +1,9 @@
-package br.upe.comunicards.domain.usuarios.controller;
+package br.upe.comunicards.domain.usuarios.controllers;
 
 import br.upe.comunicards.domain.usuarios.models.Usuario;
-import br.upe.comunicards.domain.usuarios.service.UsuarioService;
+import br.upe.comunicards.domain.usuarios.models.DTOs.UsuarioDTO;
+import br.upe.comunicards.domain.usuarios.services.UsuarioService;
+import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,13 +14,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/usuarios")
+@AllArgsConstructor
 public class UsuarioController {
-
     private final UsuarioService usuarioService;
-
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
 
     // Listar todos os usuários
     @CrossOrigin(origins = "http://localhost:5173")
@@ -27,12 +25,12 @@ public class UsuarioController {
         return ResponseEntity.ok().body(usuarioService.getAll());
     }
 
-    // Buscar usuário por ID (Agora usando UUID)
+    // Buscar usuário por ID
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/{id}")
     public ResponseEntity<?> getUsuarioById(@PathVariable String id) {
         try {
-            UUID uuid = UUID.fromString(id);  // Conversão de String para UUID
+            UUID uuid = UUID.fromString(id); 
             Usuario usuario = usuarioService.getById(uuid);
             if (usuario == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
@@ -46,14 +44,15 @@ public class UsuarioController {
     // Cadastro de usuário
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/cadastro")
-    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        System.out.println(usuarioDTO.email() + " " + usuarioDTO.senha() + " " + usuarioDTO.nome());
         try {
-            Usuario usuarioExistente = usuarioService.buscarPorEmail(usuario.getEmail());
+            Usuario usuarioExistente = usuarioService.buscarPorEmail(usuarioDTO.email());
             if (usuarioExistente != null) {
                 return ResponseEntity.status(409).body(null);
             }
 
-            Usuario novoUsuario = usuarioService.salvar(usuario);
+            Usuario novoUsuario = usuarioService.create(usuarioDTO);
             return ResponseEntity.ok().body(novoUsuario);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null); 
@@ -69,6 +68,29 @@ public class UsuarioController {
             return ResponseEntity.ok().body("Login efetuado com sucesso.");
         } else {
             return ResponseEntity.status(401).body("Email ou senha inválidos.");
+        }
+    }
+
+    // Atualizar usuário
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PutMapping("/{id}")
+    public ResponseEntity<Usuario> updateUsuario(@PathVariable UUID id, @RequestBody UsuarioDTO usuarioDTO) {
+        try {
+            return ResponseEntity.ok(usuarioService.update(usuarioDTO, id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Deletar usuário
+    @CrossOrigin(origins = "http://localhost:5173")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUsuario(@PathVariable UUID id) {
+        try {
+            usuarioService.delete(id);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(403).body(e.getMessage());
         }
     }
 }

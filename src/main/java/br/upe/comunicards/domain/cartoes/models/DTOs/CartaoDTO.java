@@ -15,12 +15,14 @@ public record CartaoDTO(
         @NotNull
         String frase,
         @NotNull
-        String urlImagem
+        String urlImagem,
+        @NotNull
+        boolean isBase
 ) {
 
     public static CartaoDTO from(Cartao cartao) {
         return new CartaoDTO(cartao.getTitulo(),
-                cartao.getCategoria().name(), cartao.getFrase(), cartao.getUrlImagem());
+                cartao.getCategoria().name(), cartao.getFrase(), cartao.getUrlImagem(), cartao.isBase());
     }
 
     public Cartao toCartao() {
