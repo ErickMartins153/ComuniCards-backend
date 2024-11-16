@@ -19,13 +19,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario create(UsuarioDTO usuario) {
-        if (usuarioRepository.findByEmail(usuario.email()) != null) {
-            throw new RuntimeException("Email já cadastrado.");
-        }
-        if (usuarioRepository.save(usuario) == null) {
-            throw new RuntimeException("Erro ao salvar usuário.");
-        }
-        return usuarioRepository.save(usuario.toUsuario());
+        Usuario novoUsuario = usuario.toUsuario();
+        return usuarioRepository.save(novoUsuario);
     }
 
     @Override
