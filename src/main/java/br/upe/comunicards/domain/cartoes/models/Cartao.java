@@ -13,7 +13,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter @ToString @EqualsAndHashCode
+@Setter
+@ToString
+@EqualsAndHashCode
 public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,10 +31,16 @@ public class Cartao {
     @Column(name = "frase", nullable = false)
     private String frase;
 
-
     @Column(name = "url_imagem", nullable = false)
     private String urlImagem;
 
+    @Column(name = "is_base", nullable = false)
+    private boolean isBase;
+
+    @ManyToOne
+    @JoinColumn(name = "criador_id", nullable = false)
+    private Usuario criador;
+
     @ManyToMany(mappedBy = "favoritos")
-    Set<Usuario> favoritados;
+    private Set<Usuario> favoritados;
 }

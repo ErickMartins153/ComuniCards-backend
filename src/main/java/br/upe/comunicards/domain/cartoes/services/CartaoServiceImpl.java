@@ -56,10 +56,18 @@ public class CartaoServiceImpl implements CartaoService {
     }
 
     @Override
-    public void delete(UUID id) {
-        if (!cartaoRepository.existsById(id)) {
-            throw new RuntimeException("Não existe cartão cadastrado com o id " + id);
+    public void delete(UUID cartaoId, UUID usuarioId) {
+        Cartao cartao = cartaoRepository.findById(cartaoId)
+                .orElseThrow(() -> new RuntimeException("Cartão não encontrado"));
+
+        if (cartao.isBase()) {
+            throw new RuntimeException("Cartão base não pode ser deletado");
         }
-        cartaoRepository.deleteById(id);
+
+        if (!cartao.getCriador().getId().equals(usuarioId)) {
+            throw new RuntimeException("Você não tem permissão para deletar este cartão");
+        }
+
+        cartaoRepository.delete(cartao);
     }
 }

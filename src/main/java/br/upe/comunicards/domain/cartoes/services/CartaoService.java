@@ -16,5 +16,5 @@ public interface CartaoService {
 
     public Cartao update(CartaoDTO cartao, UUID id);
 
-    public void delete(UUID id);
+    public void delete(UUID idCartao,  UUID usuarioId);
 }
