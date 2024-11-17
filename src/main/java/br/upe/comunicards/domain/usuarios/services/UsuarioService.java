@@ -1,6 +1,7 @@
 package br.upe.comunicards.domain.usuarios.services;
 
 import br.upe.comunicards.domain.cartoes.models.Cartao;
+import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
 import br.upe.comunicards.domain.usuarios.models.Usuario;
 import br.upe.comunicards.domain.usuarios.models.DTOs.UsuarioDTO;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public interface UsuarioService {
 
     void delete(UUID id);
 
-    Set<Cartao> getFavoritos(UUID usuarioId);
+    Set<CartaoDTO> getFavoritos(UUID usuarioId);
 
 
 }

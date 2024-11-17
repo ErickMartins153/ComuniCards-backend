@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import br.upe.comunicards.domain.cartoes.models.Cartao;
+import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,14 +66,14 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRepository.delete(usuario);
     }
 
-    public Set<Cartao> getFavoritos(UUID usuarioId) {
+    public Set<CartaoDTO> getFavoritos(UUID usuarioId) {
         Usuario usuario = usuarioRepository.getById(usuarioId);
 
         return usuario.getFavoritos().stream()
                 .map(favorito -> {
                     favorito.setIsFavorito(true);
                     return favorito;
-                })
+                }).map(CartaoDTO::from)
                 .collect(Collectors.toSet());
     }
 

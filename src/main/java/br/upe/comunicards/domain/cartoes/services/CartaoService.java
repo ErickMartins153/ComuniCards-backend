@@ -8,13 +8,13 @@ import java.util.UUID;
 
 public interface CartaoService {
 
-     List<Cartao> getAll(UUID usuarioId);
+     List<CartaoDTO> getAll(UUID usuarioId);
 
-     Cartao getById(UUID id);
+     CartaoDTO getById(UUID id);
 
-     Cartao create(CartaoDTO cartao);
+     CartaoDTO create(CartaoDTO cartao);
 
-     Cartao update(CartaoDTO cartao, UUID id);
+     CartaoDTO update(CartaoDTO cartao, UUID id);
 
      void delete(UUID idCartao,  UUID usuarioId);
 

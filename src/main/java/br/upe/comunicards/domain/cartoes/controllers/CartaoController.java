@@ -18,13 +18,13 @@ public class CartaoController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping()
-    public ResponseEntity<List<Cartao>> getCartoes( @RequestHeader("Usuario-Id") UUID usuarioId) {
+    public ResponseEntity<List<CartaoDTO>> getCartoes( @RequestHeader("Usuario-Id") UUID usuarioId) {
         return ResponseEntity.ok().body(cartaoService.getAll(usuarioId));
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/{id}")
-    public ResponseEntity<Cartao> getCartaoById(@PathVariable UUID id) {
+    public ResponseEntity<CartaoDTO> getCartaoById(@PathVariable UUID id) {
         try {
             return ResponseEntity.ok().body(cartaoService.getById(id));
 
@@ -35,14 +35,14 @@ public class CartaoController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping()
-    public ResponseEntity<Cartao> createCartao(@RequestBody CartaoDTO cartaoDTO) {
+    public ResponseEntity<CartaoDTO> createCartao(@RequestBody CartaoDTO cartaoDTO) {
 
         return ResponseEntity.ok().body(cartaoService.create(cartaoDTO));
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/{id}")
-    public ResponseEntity<Cartao> updateCartao(@PathVariable UUID id, @RequestBody CartaoDTO cartaoDTO) {
+    public ResponseEntity<CartaoDTO> updateCartao(@PathVariable UUID id, @RequestBody CartaoDTO cartaoDTO) {
         try {
 
             cartaoService.update(cartaoDTO, id);
@@ -69,6 +69,8 @@ public class CartaoController {
             @PathVariable UUID id,
             @RequestHeader("Usuario-Id") UUID usuarioId) {
         try {
+            System.out.println(id);
+            System.out.println(usuarioId);
             cartaoService.favoritarCartao(usuarioId, id);
             return ResponseEntity.ok().body("Cartão favoritado com sucesso.");
         } catch (RuntimeException e) {

@@ -11,6 +11,8 @@ import java.util.UUID;
 @Builder
 public record CartaoDTO(
         @NotNull
+        UUID id,
+        @NotNull
         String titulo,
         @NotNull
         String categoria,
@@ -26,7 +28,7 @@ public record CartaoDTO(
 ) {
 
     public static CartaoDTO from(Cartao cartao) {
-        return new CartaoDTO(cartao.getTitulo(),
+        return new CartaoDTO(cartao.getId(), cartao.getTitulo(),
                 cartao.getCategoria().name(), cartao.getFrase(), cartao.getUrlImagem(), cartao.isBase(), cartao.getCriador().getId(), cartao.isFavorito());
     }
 
@@ -46,6 +48,7 @@ public record CartaoDTO(
         cartao.setFrase(frase);
         cartao.setUrlImagem(urlImagem());
         cartao.setBase(isBase);
+        cartao.setId(id);
         return cartao;
     }
 }

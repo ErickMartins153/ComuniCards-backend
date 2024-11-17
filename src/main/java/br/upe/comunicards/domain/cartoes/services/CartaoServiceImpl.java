@@ -23,7 +23,7 @@ public class CartaoServiceImpl implements CartaoService {
     UsuarioService usuarioService;
 
     @Override
-    public List<Cartao> getAll(UUID usuarioId) {
+    public List<CartaoDTO> getAll(UUID usuarioId) {
         List<Cartao> cartoes = cartaoRepository.findAll();
 
         Usuario usuario = usuarioService.getById(usuarioId);
@@ -32,28 +32,32 @@ public class CartaoServiceImpl implements CartaoService {
             cartao.setIsFavorito(usuario.getFavoritos().contains(cartao));
         });
 
-        return cartoes;
+        return cartoes.stream().map(CartaoDTO::from).toList();
     }
 
     @Override
-    public Cartao getById(UUID id) {
-        Optional<Cartao> cartao = cartaoRepository.findById(id);
+    public CartaoDTO getById(UUID id) {
+        Cartao cartao = cartaoRepository.findById(id).orElseThrow(() -> new RuntimeException("Cartão não encontrado"));
 
-        if (cartao.isEmpty()) return null;
 
-        return cartao.get();
+        return CartaoDTO.from(cartao);
     }
 
     @Override
-    public Cartao create(CartaoDTO cartaoDTO) {
+    public CartaoDTO create(CartaoDTO cartaoDTO) {
         Cartao cartao = cartaoDTO.toCartao();
-        cartao.setCriador(usuarioService.getById(cartaoDTO.criadorId()));
+        Usuario usuario = usuarioService.getById(cartaoDTO.criadorId());
+        cartao.setCriador(usuario);
+        cartao.addFavoritado(usuario);
         Cartao savedCartao = cartaoRepository.save(cartao);
-        return savedCartao;
+        usuario.addFavorito(savedCartao);
+        usuarioService.update(UsuarioDTO.from(usuario), usuario.getId());
+
+        return CartaoDTO.from(savedCartao);
     }
 
     @Override
-    public Cartao update(CartaoDTO cartaoDTO, UUID id) {
+    public CartaoDTO update(CartaoDTO cartaoDTO, UUID id) {
         Optional<Cartao> cartaoOptional = cartaoRepository.findById(id);
         if (cartaoOptional.isEmpty()) return null;
 
@@ -61,7 +65,7 @@ public class CartaoServiceImpl implements CartaoService {
 
         BeanUtils.copyProperties(cartaoDTO, cartao, "id");
 
-        return cartaoRepository.save(cartao);
+        return CartaoDTO.from(cartaoRepository.save(cartao));
     }
 
     @Override

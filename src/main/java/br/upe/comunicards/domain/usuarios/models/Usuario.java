@@ -1,6 +1,8 @@
 package br.upe.comunicards.domain.usuarios.models;
 
 import br.upe.comunicards.domain.cartoes.models.Cartao;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -39,10 +42,14 @@ public class Usuario {
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "cartao_id")
     )
-    @JsonManagedReference
+    @JsonIgnore
     private Set<Cartao> favoritos = new HashSet<>();
 
     public void setFavoritos(Set<Cartao> novosFavoritos) {
         this.favoritos.addAll(novosFavoritos);
+    }
+
+    public void addFavorito(Cartao novoFavorito) {
+        this.favoritos.add(novoFavorito);
     }
 }

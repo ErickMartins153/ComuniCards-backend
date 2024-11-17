@@ -1,6 +1,7 @@
 package br.upe.comunicards.domain.usuarios.controllers;
 
 import br.upe.comunicards.domain.cartoes.models.Cartao;
+import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
 import br.upe.comunicards.domain.usuarios.models.DTOs.Credentials;
 import br.upe.comunicards.domain.usuarios.models.Usuario;
 import br.upe.comunicards.domain.usuarios.models.DTOs.UsuarioDTO;
@@ -101,7 +102,7 @@ public class UsuarioController {
     public ResponseEntity<?> getFavoritos(
             @PathVariable UUID usuarioId) {
         try {
-            Set<Cartao> favoritos = usuarioService.getFavoritos(usuarioId);
+            Set<CartaoDTO> favoritos = usuarioService.getFavoritos(usuarioId);
             return ResponseEntity.ok().body(favoritos);
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());

@@ -2,6 +2,7 @@ package br.upe.comunicards.domain.audios.services;
 
 import br.upe.comunicards.domain.audios.models.AudioResponse;
 import br.upe.comunicards.domain.cartoes.models.Cartao;
+import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
 import br.upe.comunicards.domain.cartoes.services.CartaoService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -20,11 +21,11 @@ public class AudioServiceImpl implements AudioService {
 
     @Override
     public AudioResponse getAudio(UUID id) {
-        Cartao cartao = cartaoService.getById(id);
+        CartaoDTO cartao = cartaoService.getById(id);
         if (cartao == null) {
             throw new RuntimeException("Não foi possível achar um cartão com id: " + id);
         }
-        String fraseCodificada = cartao.getFrase().replaceAll("\\+", "%20");
+        String fraseCodificada = cartao.frase().replaceAll("\\+", "%20");
 
 
         if (fraseCodificada == null) {

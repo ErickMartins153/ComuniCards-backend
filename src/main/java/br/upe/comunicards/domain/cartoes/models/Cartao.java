@@ -3,9 +3,11 @@ package br.upe.comunicards.domain.cartoes.models;
 import br.upe.comunicards.domain.cartoes.models.enums.Categoria;
 import br.upe.comunicards.domain.usuarios.models.Usuario;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -46,8 +48,8 @@ public class Cartao {
     private Usuario criador;
 
     @ManyToMany(mappedBy = "favoritos")
-    @JsonBackReference
-    private Set<Usuario> favoritados;
+    @JsonIgnore
+    private Set<Usuario> favoritados = new HashSet<>();
 
     public boolean isFavorito() {
         return isFavorito;
@@ -55,6 +57,10 @@ public class Cartao {
 
     public void setIsFavorito(boolean isFavorito) {
         this.isFavorito = isFavorito;
+    }
+
+    public void addFavoritado(Usuario usuario) {
+        this.favoritados.add(usuario);
     }
 
 }
