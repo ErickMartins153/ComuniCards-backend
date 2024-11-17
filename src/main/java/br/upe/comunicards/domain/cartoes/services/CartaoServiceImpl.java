@@ -38,6 +38,7 @@ public class CartaoServiceImpl implements CartaoService {
     @Override
     public Cartao create(CartaoDTO cartaoDTO) {
         Cartao cartao = cartaoDTO.toCartao();
+        System.out.println(cartaoDTO);
         cartao.setCriador(usuarioService.getById(cartaoDTO.criadorId()));
         Cartao savedCartao = cartaoRepository.save(cartao);
         return savedCartao;
