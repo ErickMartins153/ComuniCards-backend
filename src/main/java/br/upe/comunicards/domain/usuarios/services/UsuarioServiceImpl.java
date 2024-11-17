@@ -18,9 +18,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Override
-    public Usuario create(UsuarioDTO usuario) {
-        Usuario novoUsuario = usuario.toUsuario();
-        return usuarioRepository.save(novoUsuario);
+    public Usuario create(Usuario usuario) {
+        return usuarioRepository.save(usuario);
     }
 
     @Override

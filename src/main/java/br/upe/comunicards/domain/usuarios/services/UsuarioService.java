@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Service
 public interface UsuarioService {
-    public Usuario create(UsuarioDTO usuarioDTO);
+    public Usuario create(Usuario usuario);
     public Usuario buscarPorEmail(String email);
     public List<Usuario> getAll();
     public Usuario getById(UUID id);

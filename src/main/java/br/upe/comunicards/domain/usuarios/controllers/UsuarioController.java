@@ -44,15 +44,15 @@ public class UsuarioController {
     // Cadastro de usuário
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/cadastro")
-    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        System.out.println(usuarioDTO.email() + " " + usuarioDTO.senha() + " " + usuarioDTO.nome());
+    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody Usuario usuario) {
+        System.out.println("To estressado" + usuario.getEmail() + " " + usuario.getNome());
         try {
-            Usuario usuarioExistente = usuarioService.buscarPorEmail(usuarioDTO.email());
+            Usuario usuarioExistente = usuarioService.buscarPorEmail(usuario.getEmail());
             if (usuarioExistente != null) {
                 return ResponseEntity.status(409).body(null);
             }
 
-            Usuario novoUsuario = usuarioService.create(usuarioDTO);
+            Usuario novoUsuario = usuarioService.create(usuario);
             return ResponseEntity.ok().body(novoUsuario);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null); 
@@ -64,6 +64,7 @@ public class UsuarioController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Usuario usuario) {
         Usuario usuarioEncontrado = usuarioService.buscarPorEmail(usuario.getEmail());
+        System.out.println(usuarioEncontrado.getNome());
         if (usuarioEncontrado != null && usuarioEncontrado.getSenha().equals(usuario.getSenha())) {
             return ResponseEntity.ok().body("Login efetuado com sucesso.");
         } else {
