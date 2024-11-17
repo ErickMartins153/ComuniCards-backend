@@ -1,5 +1,6 @@
 package br.upe.comunicards.domain.usuarios.controllers;
 
+import br.upe.comunicards.domain.usuarios.models.DTOs.Credentials;
 import br.upe.comunicards.domain.usuarios.models.Usuario;
 import br.upe.comunicards.domain.usuarios.models.DTOs.UsuarioDTO;
 import br.upe.comunicards.domain.usuarios.services.UsuarioService;
@@ -30,7 +31,7 @@ public class UsuarioController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getUsuarioById(@PathVariable String id) {
         try {
-            UUID uuid = UUID.fromString(id); 
+            UUID uuid = UUID.fromString(id);
             Usuario usuario = usuarioService.getById(uuid);
             if (usuario == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
@@ -45,7 +46,6 @@ public class UsuarioController {
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/cadastro")
     public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        System.out.println(usuarioDTO.email() + " " + usuarioDTO.senha() + " " + usuarioDTO.nome());
         try {
             Usuario usuarioExistente = usuarioService.buscarPorEmail(usuarioDTO.email());
             if (usuarioExistente != null) {
@@ -55,17 +55,17 @@ public class UsuarioController {
             Usuario novoUsuario = usuarioService.create(usuarioDTO);
             return ResponseEntity.ok().body(novoUsuario);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(null); 
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
     // Login de usuário
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Usuario usuario) {
-        Usuario usuarioEncontrado = usuarioService.buscarPorEmail(usuario.getEmail());
-        if (usuarioEncontrado != null && usuarioEncontrado.getSenha().equals(usuario.getSenha())) {
-            return ResponseEntity.ok().body("Login efetuado com sucesso.");
+    public ResponseEntity<?> login(@RequestBody Credentials usuario) {
+        Usuario usuarioEncontrado = usuarioService.buscarPorEmail(usuario.email());
+        if (usuarioEncontrado != null && usuarioEncontrado.getSenha().equals(usuario.senha())) {
+            return ResponseEntity.ok().body(UsuarioDTO.from(usuarioEncontrado));
         } else {
             return ResponseEntity.status(401).body("Email ou senha inválidos.");
         }

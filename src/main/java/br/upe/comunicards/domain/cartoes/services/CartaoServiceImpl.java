@@ -4,6 +4,8 @@ import br.upe.comunicards.domain.cartoes.models.Cartao;
 import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
 
 import br.upe.comunicards.domain.cartoes.repositories.CartaoRepository;
+import br.upe.comunicards.domain.usuarios.services.UsuarioService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +15,11 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class CartaoServiceImpl implements CartaoService {
     CartaoRepository cartaoRepository;
 
-    @Autowired
-    public CartaoServiceImpl(CartaoRepository cartaoRepository) {
-        this.cartaoRepository = cartaoRepository;
-    }
+    UsuarioService usuarioService;
 
     @Override
     public List<Cartao> getAll() {
@@ -38,9 +38,9 @@ public class CartaoServiceImpl implements CartaoService {
     @Override
     public Cartao create(CartaoDTO cartaoDTO) {
         Cartao cartao = cartaoDTO.toCartao();
+        cartao.setCriador(usuarioService.getById(cartaoDTO.criadorId()));
         Cartao savedCartao = cartaoRepository.save(cartao);
         return savedCartao;
-
     }
 
     @Override

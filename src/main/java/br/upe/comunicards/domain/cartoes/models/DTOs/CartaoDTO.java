@@ -5,6 +5,8 @@ import br.upe.comunicards.domain.cartoes.models.enums.Categoria;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
+import java.util.UUID;
+
 
 @Builder
 public record CartaoDTO(
@@ -17,12 +19,14 @@ public record CartaoDTO(
         @NotNull
         String urlImagem,
         @NotNull
-        boolean isBase
+        boolean isBase,
+        @NotNull
+        UUID criadorId
 ) {
 
     public static CartaoDTO from(Cartao cartao) {
         return new CartaoDTO(cartao.getTitulo(),
-                cartao.getCategoria().name(), cartao.getFrase(), cartao.getUrlImagem(), cartao.isBase());
+                cartao.getCategoria().name(), cartao.getFrase(), cartao.getUrlImagem(), cartao.isBase(), cartao.getCriador().getId());
     }
 
     public Cartao toCartao() {
@@ -36,9 +40,12 @@ public record CartaoDTO(
             throw new RuntimeException("Categoria inválida: " + categoria, e);
         }
 
+
+
         cartao.setCategoria(categoriaEnum);
         cartao.setFrase(frase);
         cartao.setUrlImagem(urlImagem());
+        cartao.setBase(isBase);
         return cartao;
     }
 }
