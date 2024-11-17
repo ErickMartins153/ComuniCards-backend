@@ -18,8 +18,8 @@ public class CartaoController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping()
-    public ResponseEntity<List<Cartao>> getCartaos() {
-        return ResponseEntity.ok().body(cartaoService.getAll());
+    public ResponseEntity<List<Cartao>> getCartoes( @RequestHeader("Usuario-Id") UUID usuarioId) {
+        return ResponseEntity.ok().body(cartaoService.getAll(usuarioId));
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
@@ -60,6 +60,19 @@ public class CartaoController {
             return ResponseEntity.ok().build();
         }catch (RuntimeException e) {
             return ResponseEntity.status(403).body(e.getMessage());
+        }
+    }
+
+    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/{id}/favoritar")
+    public ResponseEntity<?> favoritarCartao(
+            @PathVariable UUID id,
+            @RequestHeader("Usuario-Id") UUID usuarioId) {
+        try {
+            cartaoService.favoritarCartao(usuarioId, id);
+            return ResponseEntity.ok().body("Cartão favoritado com sucesso.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
     }
 }

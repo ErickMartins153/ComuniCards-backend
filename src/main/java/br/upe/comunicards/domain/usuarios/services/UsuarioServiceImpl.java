@@ -2,8 +2,11 @@ package br.upe.comunicards.domain.usuarios.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import br.upe.comunicards.domain.cartoes.models.Cartao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +21,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Override
-    public Usuario create(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+    public Usuario create(UsuarioDTO usuario) {
+        Usuario novoUsuario = usuario.toUsuario(usuario.senha());
+        return usuarioRepository.save(novoUsuario);
     }
 
     @Override
@@ -32,12 +36,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public List<Usuario> getAll() {
-    List<Usuario> usuarios = usuarioRepository.findAll();
-    if (usuarios.isEmpty()) {
-        return new ArrayList<>();
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        if (usuarios.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return usuarios;
     }
-    return usuarios;
-}
 
     @Override
     public Usuario getById(UUID id) {
@@ -48,11 +52,10 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
 
-
-
     public Usuario update(UsuarioDTO usuarioDTO, UUID id) {
         Usuario usuario = getById(id);
         usuario.setEmail(usuarioDTO.email());
+        usuario.setFotoUrl(usuarioDTO.fotoUrl());
         usuario.setSenha(usuarioDTO.senha());
         usuario.setNome(usuarioDTO.nome());
         return usuarioRepository.save(usuario);
@@ -63,6 +66,17 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRepository.delete(usuario);
     }
 
-    
-    
+    public Set<Cartao> getFavoritos(UUID usuarioId) {
+        Usuario usuario = usuarioRepository.getById(usuarioId);
+
+        return usuario.getFavoritos().stream()
+                .map(favorito -> {
+                    favorito.setIsFavorito(true);
+                    return favorito;
+                })
+                .collect(Collectors.toSet());
+    }
+
+
+
 }
