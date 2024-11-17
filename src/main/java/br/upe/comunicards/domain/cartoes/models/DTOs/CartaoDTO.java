@@ -21,12 +21,13 @@ public record CartaoDTO(
         @NotNull
         boolean isBase,
         @NotNull
-        UUID criadorId
+        UUID criadorId,
+        boolean isFavorito
 ) {
 
     public static CartaoDTO from(Cartao cartao) {
         return new CartaoDTO(cartao.getTitulo(),
-                cartao.getCategoria().name(), cartao.getFrase(), cartao.getUrlImagem(), cartao.isBase(), cartao.getCriador().getId());
+                cartao.getCategoria().name(), cartao.getFrase(), cartao.getUrlImagem(), cartao.isBase(), cartao.getCriador().getId(), cartao.isFavorito());
     }
 
     public Cartao toCartao() {
@@ -39,7 +40,6 @@ public record CartaoDTO(
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Categoria inválida: " + categoria, e);
         }
-
 
 
         cartao.setCategoria(categoriaEnum);

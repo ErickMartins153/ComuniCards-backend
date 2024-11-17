@@ -2,8 +2,11 @@ package br.upe.comunicards.domain.usuarios.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import br.upe.comunicards.domain.cartoes.models.Cartao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +36,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public List<Usuario> getAll() {
-    List<Usuario> usuarios = usuarioRepository.findAll();
-    if (usuarios.isEmpty()) {
-        return new ArrayList<>();
+        List<Usuario> usuarios = usuarioRepository.findAll();
+        if (usuarios.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return usuarios;
     }
-    return usuarios;
-}
 
     @Override
     public Usuario getById(UUID id) {
@@ -47,8 +50,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
         return usuarioRepository.findById(id).get();
     }
-
-
 
 
     public Usuario update(UsuarioDTO usuarioDTO, UUID id) {
@@ -64,6 +65,16 @@ public class UsuarioServiceImpl implements UsuarioService {
         usuarioRepository.delete(usuario);
     }
 
-    
-    
+    public Set<Cartao> getFavoritos(UUID usuarioId) {
+        Usuario usuario = usuarioRepository.getById(usuarioId);
+
+        return usuario.getFavoritos().stream()
+                .map(favorito -> {
+                    favorito.setIsFavorito(true);
+                    return favorito;
+                })
+                .collect(Collectors.toSet());
+    }
+
+
 }

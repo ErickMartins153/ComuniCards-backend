@@ -4,10 +4,11 @@ import br.upe.comunicards.domain.cartoes.models.Cartao;
 import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
 
 import br.upe.comunicards.domain.cartoes.repositories.CartaoRepository;
+import br.upe.comunicards.domain.usuarios.models.DTOs.UsuarioDTO;
+import br.upe.comunicards.domain.usuarios.models.Usuario;
 import br.upe.comunicards.domain.usuarios.services.UsuarioService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +23,16 @@ public class CartaoServiceImpl implements CartaoService {
     UsuarioService usuarioService;
 
     @Override
-    public List<Cartao> getAll() {
-        return cartaoRepository.findAll();
+    public List<Cartao> getAll(UUID usuarioId) {
+        List<Cartao> cartoes = cartaoRepository.findAll();
+
+        Usuario usuario = usuarioService.getById(usuarioId);
+
+        cartoes.forEach(cartao -> {
+            cartao.setIsFavorito(usuario.getFavoritos().contains(cartao));
+        });
+
+        return cartoes;
     }
 
     @Override
@@ -38,7 +47,6 @@ public class CartaoServiceImpl implements CartaoService {
     @Override
     public Cartao create(CartaoDTO cartaoDTO) {
         Cartao cartao = cartaoDTO.toCartao();
-        System.out.println(cartaoDTO);
         cartao.setCriador(usuarioService.getById(cartaoDTO.criadorId()));
         Cartao savedCartao = cartaoRepository.save(cartao);
         return savedCartao;
@@ -71,4 +79,22 @@ public class CartaoServiceImpl implements CartaoService {
 
         cartaoRepository.delete(cartao);
     }
+
+    public void favoritarCartao(UUID usuarioId, UUID cartaoId) {
+
+        Usuario usuario = usuarioService.getById(usuarioId);
+
+        Cartao cartao = cartaoRepository.findById(cartaoId)
+                .orElseThrow(() -> new RuntimeException("Cartão não encontrado"));
+
+        if (usuario.getFavoritos().contains(cartao)) {
+            usuario.getFavoritos().remove(cartao);
+        } else {
+            usuario.getFavoritos().add(cartao);
+        }
+
+        usuarioService.update(UsuarioDTO.from(usuario), usuarioId);
+    }
+
+
 }
