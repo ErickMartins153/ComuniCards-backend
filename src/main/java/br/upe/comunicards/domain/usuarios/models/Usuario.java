@@ -27,6 +27,9 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(name = "foto")
+    private String fotoUrl;
+
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 

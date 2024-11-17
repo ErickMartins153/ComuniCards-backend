@@ -11,17 +11,20 @@ import java.util.stream.Collectors;
 @Builder
 public record UsuarioDTO(
         UUID id,
+        String fotoUrl,
         String nome,
         String email,
         String senha,
         Set<UUID> favoritosIds
 ) {
-    public Usuario toUsuario() {
+
+    public Usuario toUsuario(String senha) {
         Usuario usuario = new Usuario();
+        usuario.setFotoUrl(fotoUrl);
         usuario.setId(id);
+        usuario.setNome(nome);
         usuario.setEmail(email);
         usuario.setSenha(senha);
-        usuario.setNome(nome);
         return usuario;
     }
 
@@ -29,7 +32,7 @@ public record UsuarioDTO(
         Set<UUID> favoritosIds = usuario.getFavoritos().stream()
                 .map(Cartao::getId)
                 .collect(Collectors.toSet());
-        return new UsuarioDTO(usuario.getId(), usuario.getNome(), usuario.getEmail(), usuario.getSenha(), favoritosIds);
+        return new UsuarioDTO(usuario.getId(), usuario.getFotoUrl(), usuario.getNome(), usuario.getEmail(), usuario.getSenha(), favoritosIds);
     }
 }
 

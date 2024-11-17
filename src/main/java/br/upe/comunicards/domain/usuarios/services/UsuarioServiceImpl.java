@@ -23,7 +23,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario create(UsuarioDTO usuario) {
-        Usuario novoUsuario = usuario.toUsuario();
+        Usuario novoUsuario = usuario.toUsuario(usuario.senha());
         return usuarioRepository.save(novoUsuario);
     }
 
@@ -56,6 +56,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario update(UsuarioDTO usuarioDTO, UUID id) {
         Usuario usuario = getById(id);
         usuario.setEmail(usuarioDTO.email());
+        usuario.setFotoUrl(usuarioDTO.fotoUrl());
         usuario.setSenha(usuarioDTO.senha());
         usuario.setNome(usuarioDTO.nome());
         return usuarioRepository.save(usuario);
@@ -76,6 +77,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 }).map(CartaoDTO::from)
                 .collect(Collectors.toSet());
     }
+
 
 
 }

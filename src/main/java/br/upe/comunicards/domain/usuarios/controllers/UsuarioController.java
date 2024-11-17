@@ -48,14 +48,15 @@ public class UsuarioController {
     // Cadastro de usuário
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/cadastro")
-    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Usuario> cadastrarUsuario(@RequestBody UsuarioDTO usuario) {
+        System.out.println(usuario.email());
         try {
-            Usuario usuarioExistente = usuarioService.buscarPorEmail(usuarioDTO.email());
+            Usuario usuarioExistente = usuarioService.buscarPorEmail(usuario.email());
             if (usuarioExistente != null) {
                 return ResponseEntity.status(409).body(null);
             }
 
-            Usuario novoUsuario = usuarioService.create(usuarioDTO);
+            Usuario novoUsuario = usuarioService.create(usuario);
             return ResponseEntity.ok().body(novoUsuario);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);
@@ -75,20 +76,27 @@ public class UsuarioController {
     }
 
     // Atualizar usuário
-    @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> updateUsuario(@PathVariable UUID id, @RequestBody UsuarioDTO usuarioDTO) {
         try {
+    
+            if (usuarioDTO.fotoUrl() != null && !usuarioDTO.fotoUrl().isEmpty()) {
+                Usuario usuario = usuarioService.getById(id);
+                usuario.setFotoUrl(usuarioDTO.fotoUrl());
+                usuarioService.update(usuarioDTO, id);
+            }
             return ResponseEntity.ok(usuarioService.update(usuarioDTO, id));
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
+
     // Deletar usuário
     @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUsuario(@PathVariable UUID id) {
+        System.out.println(id);
         try {
             usuarioService.delete(id);
             return ResponseEntity.ok().build();
