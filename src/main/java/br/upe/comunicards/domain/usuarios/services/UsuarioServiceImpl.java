@@ -6,7 +6,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import br.upe.comunicards.domain.cartoes.models.Cartao;
 import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +55,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario update(UsuarioDTO usuarioDTO, UUID id) {
         Usuario usuario = getById(id);
         usuario.setEmail(usuarioDTO.email());
-        usuario.setFotoUrl(usuarioDTO.fotoUrl());
+        usuario.setFoto(usuarioDTO.foto());
         usuario.setSenha(usuarioDTO.senha());
         usuario.setNome(usuarioDTO.nome());
         return usuarioRepository.save(usuario);
@@ -68,6 +67,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     public Set<CartaoDTO> getFavoritos(UUID usuarioId) {
+        @SuppressWarnings("deprecation")
         Usuario usuario = usuarioRepository.getById(usuarioId);
 
         return usuario.getFavoritos().stream()

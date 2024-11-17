@@ -28,7 +28,7 @@ public class Usuario {
     private UUID id;
 
     @Column(name = "foto")
-    private String fotoUrl;
+    private String foto;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;

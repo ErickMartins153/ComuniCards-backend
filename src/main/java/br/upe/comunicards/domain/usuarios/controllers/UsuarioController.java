@@ -6,6 +6,7 @@ import br.upe.comunicards.domain.usuarios.models.DTOs.Credentials;
 import br.upe.comunicards.domain.usuarios.models.Usuario;
 import br.upe.comunicards.domain.usuarios.models.DTOs.UsuarioDTO;
 import br.upe.comunicards.domain.usuarios.services.UsuarioService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -80,9 +81,9 @@ public class UsuarioController {
     public ResponseEntity<Usuario> updateUsuario(@PathVariable UUID id, @RequestBody UsuarioDTO usuarioDTO) {
         try {
     
-            if (usuarioDTO.fotoUrl() != null && !usuarioDTO.fotoUrl().isEmpty()) {
+            if (usuarioDTO.foto() != null && !usuarioDTO.foto().isEmpty()) {
                 Usuario usuario = usuarioService.getById(id);
-                usuario.setFotoUrl(usuarioDTO.fotoUrl());
+                usuario.setFoto(usuarioDTO.foto());
                 usuarioService.update(usuarioDTO, id);
             }
             return ResponseEntity.ok(usuarioService.update(usuarioDTO, id));
@@ -96,14 +97,18 @@ public class UsuarioController {
     @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUsuario(@PathVariable UUID id) {
-        System.out.println(id);
+        System.out.println("Tentando deletar usuário com ID: " + id);
+
         try {
             usuarioService.delete(id);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body("Usuário deletado com sucesso!");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado.");
         } catch (RuntimeException e) {
-            return ResponseEntity.status(403).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Erro: " + e.getMessage());
         }
     }
+
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/{usuarioId}/favoritos")
