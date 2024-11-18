@@ -24,9 +24,10 @@ public class CartaoServiceImpl implements CartaoService {
 
     @Override
     public List<CartaoDTO> getAll(UUID usuarioId) {
-        List<Cartao> cartoes = cartaoRepository.findAll();
-
         Usuario usuario = usuarioService.getById(usuarioId);
+        List<Cartao> cartoes = cartaoRepository.findAll().stream()
+                .filter(cartao -> cartao.isBase() || cartao.getCriador().getId().equals(usuarioId))
+                .toList();
 
         cartoes.forEach(cartao -> {
             cartao.setIsFavorito(usuario.getFavoritos().contains(cartao));

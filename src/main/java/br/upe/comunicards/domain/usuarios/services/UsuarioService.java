@@ -20,7 +20,7 @@ public interface UsuarioService {
 
     Usuario getById(UUID id);
 
-    Usuario update(UsuarioDTO usuarioDTO, UUID id);
+    UsuarioDTO update(UsuarioDTO usuarioDTO, UUID id);
 
     void delete(UUID id);
 

@@ -3,6 +3,7 @@ package br.upe.comunicards.domain.cartoes.controllers;
 import br.upe.comunicards.domain.cartoes.models.Cartao;
 import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
 import br.upe.comunicards.domain.cartoes.services.CartaoService;
+import br.upe.comunicards.domain.usuarios.models.DTOs.UsuarioDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class CartaoController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping()
-    public ResponseEntity<List<CartaoDTO>> getCartoes( @RequestHeader("Usuario-Id") UUID usuarioId) {
+    public ResponseEntity<List<CartaoDTO>> getCartoes(@RequestHeader("Usuario-Id") UUID usuarioId) {
         return ResponseEntity.ok().body(cartaoService.getAll(usuarioId));
     }
 
@@ -58,7 +59,7 @@ public class CartaoController {
         try {
             cartaoService.delete(id, usuarioId);
             return ResponseEntity.ok().build();
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             return ResponseEntity.status(403).body(e.getMessage());
         }
     }
@@ -69,8 +70,6 @@ public class CartaoController {
             @PathVariable UUID id,
             @RequestHeader("Usuario-Id") UUID usuarioId) {
         try {
-            System.out.println(id);
-            System.out.println(usuarioId);
             cartaoService.favoritarCartao(usuarioId, id);
             return ResponseEntity.ok().body("Cartão favoritado com sucesso.");
         } catch (RuntimeException e) {

@@ -6,8 +6,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import br.upe.comunicards.domain.cartoes.models.Cartao;
 import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +16,9 @@ import br.upe.comunicards.domain.usuarios.models.DTOs.UsuarioDTO;
 import br.upe.comunicards.domain.usuarios.repositories.UsuarioRepository;
 
 @Service
+@AllArgsConstructor
 public class UsuarioServiceImpl implements UsuarioService {
 
-    @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Override
@@ -53,13 +53,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
 
-    public Usuario update(UsuarioDTO usuarioDTO, UUID id) {
+    public UsuarioDTO update(UsuarioDTO usuarioDTO, UUID id) {
         Usuario usuario = getById(id);
         usuario.setEmail(usuarioDTO.email());
-        usuario.setFotoUrl(usuarioDTO.fotoUrl());
+        usuario.setFoto(usuarioDTO.foto());
         usuario.setSenha(usuarioDTO.senha());
         usuario.setNome(usuarioDTO.nome());
-        return usuarioRepository.save(usuario);
+        return UsuarioDTO.from(usuarioRepository.save(usuario));
     }
 
     public void delete(UUID id) {

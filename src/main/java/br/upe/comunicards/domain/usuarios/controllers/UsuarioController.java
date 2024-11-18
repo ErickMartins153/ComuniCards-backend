@@ -1,6 +1,5 @@
 package br.upe.comunicards.domain.usuarios.controllers;
 
-import br.upe.comunicards.domain.cartoes.models.Cartao;
 import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
 import br.upe.comunicards.domain.usuarios.models.DTOs.Credentials;
 import br.upe.comunicards.domain.usuarios.models.Usuario;
@@ -76,13 +75,14 @@ public class UsuarioController {
     }
 
     // Atualizar usuário
+    @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable UUID id, @RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<UsuarioDTO> updateUsuario(@PathVariable UUID id, @RequestBody UsuarioDTO usuarioDTO) {
         try {
-    
-            if (usuarioDTO.fotoUrl() != null && !usuarioDTO.fotoUrl().isEmpty()) {
+
+            if (usuarioDTO.foto() != null && !usuarioDTO.foto().isEmpty()) {
                 Usuario usuario = usuarioService.getById(id);
-                usuario.setFotoUrl(usuarioDTO.fotoUrl());
+                usuario.setFoto(usuarioDTO.foto());
                 usuarioService.update(usuarioDTO, id);
             }
             return ResponseEntity.ok(usuarioService.update(usuarioDTO, id));
@@ -116,6 +116,4 @@ public class UsuarioController {
             return ResponseEntity.status(400).body(e.getMessage());
         }
     }
-
-
 }

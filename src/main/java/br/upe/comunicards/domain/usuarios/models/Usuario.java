@@ -3,7 +3,6 @@ package br.upe.comunicards.domain.usuarios.models;
 import br.upe.comunicards.domain.cartoes.models.Cartao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +27,7 @@ public class Usuario {
     private UUID id;
 
     @Column(name = "foto")
-    private String fotoUrl;
+    private String foto;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;

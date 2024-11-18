@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Builder
 public record UsuarioDTO(
         UUID id,
-        String fotoUrl,
+        String foto,
         String nome,
         String email,
         String senha,
@@ -20,7 +20,7 @@ public record UsuarioDTO(
 
     public Usuario toUsuario(String senha) {
         Usuario usuario = new Usuario();
-        usuario.setFotoUrl(fotoUrl);
+        usuario.setFoto(foto);
         usuario.setId(id);
         usuario.setNome(nome);
         usuario.setEmail(email);
@@ -32,7 +32,7 @@ public record UsuarioDTO(
         Set<UUID> favoritosIds = usuario.getFavoritos().stream()
                 .map(Cartao::getId)
                 .collect(Collectors.toSet());
-        return new UsuarioDTO(usuario.getId(), usuario.getFotoUrl(), usuario.getNome(), usuario.getEmail(), usuario.getSenha(), favoritosIds);
+        return new UsuarioDTO(usuario.getId(), usuario.getFoto(), usuario.getNome(), usuario.getEmail(), usuario.getSenha(), favoritosIds);
     }
 }
 
