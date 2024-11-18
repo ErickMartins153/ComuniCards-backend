@@ -68,6 +68,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     public Set<CartaoDTO> getFavoritos(UUID usuarioId) {
+        @SuppressWarnings("deprecation")
         Usuario usuario = usuarioRepository.getById(usuarioId);
 
         return usuario.getFavoritos().stream()

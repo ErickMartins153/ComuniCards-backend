@@ -1,6 +1,5 @@
 package br.upe.comunicards.domain.cartoes.services;
 
-import br.upe.comunicards.domain.cartoes.models.Cartao;
 import br.upe.comunicards.domain.cartoes.models.DTOs.CartaoDTO;
 
 import java.util.List;
